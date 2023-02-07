@@ -21,9 +21,14 @@ app.get('/profile', async (req,res)=>{
 
 app.post('/profile',async(req,res)=>{
     try{
-        const re=new User(req.body);
-        const sa= await re.save();
-        res.send(User);
+        const value= await User.findOne({id:req.body.id});
+        if(!value){
+            const re=new User(req.body);
+            const safe= await re.save();
+            res.send(safe);
+        }else{
+            res.send("Error!");
+        }
     }catch(error){
         res.status(500).send(error.message);
     }
@@ -32,8 +37,8 @@ app.post('/profile',async(req,res)=>{
 app.put('/profile/:id',async (req,res)=>{
     try{
         const id=req.params.id; 
-       const u= await User.findOneAndUpdate({id},req.body,{new:true});
-    res.send(User);
+       const value= await User.findOneAndUpdate({id},req.body);
+    res.send(value);
    }catch(error){
     res.status(500).send(error.message);
    }
@@ -42,8 +47,8 @@ app.put('/profile/:id',async (req,res)=>{
 app.delete('/profile/:id',async (req,res)=>{
     try{
         const id=req.params.id;
-    const d=  await User.findOneAndDelete({id})
-    res.send(User);
+    const del=  await User.findOneAndDelete({id})
+    res.send(del);
     }catch(error){
      res.status(500).send(error.message);
     }
@@ -53,6 +58,18 @@ app.options('/profile',(req,res)=>{
 })
 
 app.listen(5100);
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
